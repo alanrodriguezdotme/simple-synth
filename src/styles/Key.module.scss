@@ -1,0 +1,26 @@
+.key {
+  width: 80px;
+  height: 200px;
+  background-color: white;
+  color: black;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  padding: 8px 12px;
+
+  &.sharp {
+    width: 50px;
+    height: 120px;
+    background-color: black;
+    color: white;
+    position: absolute;
+    z-index: 2;
+
+    &:nth-child(3) {
+      left: 80px;
+    }
+  }
+}

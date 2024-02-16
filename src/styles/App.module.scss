@@ -1,0 +1,26 @@
+.app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.start {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.synth {
+}
+
+.keyboard {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1px;
+  position: relative;
+}
