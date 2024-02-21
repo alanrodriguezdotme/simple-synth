@@ -1,18 +1,20 @@
 .key {
-  width: 80px;
+  width: 64px;
   height: 200px;
   background-color: white;
   color: black;
+  font-size: 14px;
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
   cursor: pointer;
   position: relative;
   z-index: 1;
-  padding: 8px 12px;
+  padding: 4px 6px;
+  border: 1px solid #242424;
 
   &.sharp {
-    width: 50px;
+    width: 40px;
     height: 120px;
     background-color: black;
     color: white;

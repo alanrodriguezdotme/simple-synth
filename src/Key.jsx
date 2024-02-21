@@ -8,35 +8,37 @@ export default function Key({
   shortcutKey,
   handleKeyDown,
   handleKeyUp,
+  adsr,
 }) {
   const [isMouseDown, setIsMouseDown] = useState(false);
   const isSharp = sharpNotes.includes(midiNote);
 
   function getLeftPosition(note) {
-    let offset = 15;
+    const whiteKeyWidth = 64;
+    let offset = 12;
 
     if (note >= 54 && note <= 58) {
-      offset += 40.5;
+      offset += whiteKeyWidth / 2;
     }
 
     if (note >= 61 && note <= 63) {
-      offset += 81;
+      offset += whiteKeyWidth;
     }
 
     if (note >= 66 && note <= 70) {
-      offset += 121.5;
+      offset += whiteKeyWidth * 1.5;
     }
 
-    return (note - 48) * 40.5 + offset;
+    return (note - 48) * (whiteKeyWidth / 2) + offset;
   }
 
   return (
     <div
       className={styles.key + (isSharp ? ` ${styles.sharp}` : "")}
-      onMouseDown={() => handleKeyDown(midiNote)}
-      onMouseUp={() => handleKeyUp(midiNote)}
-      onMouseLeave={() => handleKeyUp(midiNote)}
-      style={isSharp ? { left: getLeftPosition(midiNote) } : {}}
+      onMouseDown={() => handleKeyDown(midiNote, adsr)}
+      onMouseUp={() => handleKeyUp(midiNote, adsr)}
+      onMouseLeave={() => handleKeyUp(midiNote, adsr)}
+      style={isSharp ? { left: getLeftPosition(midiNote, adsr) } : {}}
     >
       <div className={styles.keyText}>{shortcutKey}</div>
     </div>
@@ -50,4 +52,5 @@ Key.propTypes = {
   shortcutKey: PropTypes.string.isRequired,
   handleKeyDown: PropTypes.func.isRequired,
   handleKeyUp: PropTypes.func.isRequired,
+  adsr: PropTypes.object.isRequired,
 };

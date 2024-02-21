@@ -27,7 +27,7 @@ export const shortcutKeys = [
 ];
 
 
-export function keyDownShortcuts(handleKeyDown) {
+export function keyDownShortcuts(handleKeyDown, adsr) {
   return document.addEventListener("keydown", (event) => {
     const key = event.key;
     let midiNote;
@@ -64,12 +64,12 @@ export function keyDownShortcuts(handleKeyDown) {
     }
 
     if (midiNote !== undefined) {
-      handleKeyDown(midiNote);
+      handleKeyDown(midiNote, adsr);
     }
   });
 }
 
-export function keyUpShortcuts(handleKeyUp) {
+export function keyUpShortcuts(handleKeyUp, adsr) {
   return document.addEventListener("keyup", (event) => {
     const key = event.key;
     let midiNote;
@@ -106,7 +106,7 @@ export function keyUpShortcuts(handleKeyUp) {
     }
 
     if (midiNote !== undefined) {
-      handleKeyUp(midiNote)
+      handleKeyUp(midiNote, adsr)
     }
   });
 }

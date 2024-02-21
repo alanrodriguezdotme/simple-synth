@@ -3,7 +3,7 @@ import { el } from "@elemaudio/core";
 export class Synth {
   voices = [];
 
-  playNote(midiNote) {
+  playNote(midiNote, adsr) {
     const key = `v${midiNote}`;
     const freq = computeFrequency(midiNote);
 
@@ -13,15 +13,15 @@ export class Synth {
       .concat({ gate: 1, freq, key })
       .slice(-8);
 
-    return synth(this.voices);
+    return synth(this.voices, adsr);
   }
 
-  stopNote(midiNote) {
+  stopNote(midiNote, adsr) {
     const key = `v${midiNote}`;
     this.voices = this.voices.filter((voice) => voice.key !== key);
 
     if (this.voices.length > 0) {
-      return synth(this.voices);
+      return synth(this.voices, adsr);
     } else {
       return silence();
     }
@@ -38,15 +38,27 @@ export function computeFrequency(midiNote) {
   return 440 * 2 ** ((midiNote - 69) / 12);
 }
 
-function synthVoice(voice) {
+function synthVoice(voice, adsr) {
+  // Each synth voice has a gate signal like this that simply
+  // alternates between 0 and 1 according to our state, `voice`.
+  let gate = el.const({
+    key: `${voice.key}:gate`,
+    value: voice.gate,
+  });
+
+  console.log(adsr);
+  let { attack, decay, sustain, release } = adsr;
+
   return el.mul(
+    0.5,
     el.const({ key: `${voice.key}:gate`, value: voice.gate }),
+    el.adsr(attack, decay, sustain, release, gate),
     el.blepsaw(el.const({ key: `${voice.key}`, value: voice.freq }))
   );
 }
 
-function synth(voices) {
-  return el.mul(el.add(...voices.map((voice) => synthVoice(voice))), 0.1);
+function synth(voices, adsr) {
+  return el.mul(el.add(...voices.map((voice) => synthVoice(voice, adsr))), 0.5);
 }
 
 function silence() {
