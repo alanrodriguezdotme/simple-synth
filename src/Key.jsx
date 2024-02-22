@@ -8,10 +8,33 @@ export default function Key({
   shortcutKey,
   handleKeyDown,
   handleKeyUp,
-  adsr,
 }) {
   const [isMouseDown, setIsMouseDown] = useState(false);
   const isSharp = sharpNotes.includes(midiNote);
+
+  useHotkeys(
+    shortcutKey,
+    () => {
+      handleKeyDown(midiNote);
+    },
+    {
+      enableOnFormTags: true,
+      keydown: true,
+      keyup: false,
+    }
+  );
+
+  useHotkeys(
+    shortcutKey,
+    () => {
+      handleKeyUp(midiNote);
+    },
+    {
+      enableOnFormTags: true,
+      keydown: false,
+      keyup: true,
+    }
+  );
 
   function getLeftPosition(note) {
     const whiteKeyWidth = 64;
@@ -35,10 +58,10 @@ export default function Key({
   return (
     <div
       className={styles.key + (isSharp ? ` ${styles.sharp}` : "")}
-      onMouseDown={() => handleKeyDown(midiNote, adsr)}
-      onMouseUp={() => handleKeyUp(midiNote, adsr)}
-      onMouseLeave={() => handleKeyUp(midiNote, adsr)}
-      style={isSharp ? { left: getLeftPosition(midiNote, adsr) } : {}}
+      onMouseDown={() => handleKeyDown(midiNote)}
+      onMouseUp={() => handleKeyUp(midiNote)}
+      onMouseLeave={() => handleKeyUp(midiNote)}
+      style={isSharp ? { left: getLeftPosition(midiNote) } : {}}
     >
       <div className={styles.keyText}>{shortcutKey}</div>
     </div>
@@ -46,6 +69,7 @@ export default function Key({
 }
 
 import PropTypes from "prop-types";
+import { useHotkeys } from "react-hotkeys-hook";
 
 Key.propTypes = {
   midiNote: PropTypes.number.isRequired,

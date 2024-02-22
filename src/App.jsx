@@ -3,10 +3,10 @@ import styles from "./styles/App.module.scss";
 import { Engine } from "./audio/engine";
 import { Midi } from "./audio/midi";
 import { Synth } from "./audio/synth";
-import { useEffect, useState } from "react";
-import { keyDownShortcuts, keyUpShortcuts, shortcutKeys } from "./shortcuts";
-import Key from "./Key";
+import { useCallback, useEffect, useState } from "react";
+import { keyDownShortcuts, keyUpShortcuts } from "./shortcuts";
 import EnvelopeGraph from "react-envelope-graph";
+import PianoRoll from "./PianoRoll";
 
 const noteEmitter = new Emittery();
 const engine = new Engine();
@@ -30,19 +30,25 @@ export default function App() {
     console.log("getting started");
   }
 
-  function handleKeyDown(note, env) {
-    engine.render(synth.playNote(note, env));
-  }
+  const handleKeyDown = useCallback(
+    (note) => {
+      engine.render(synth.playNote(note, adsr));
+    },
+    [adsr]
+  );
 
-  function handleKeyUp(note, env) {
-    engine.render(synth.stopNote(note, env));
-  }
+  const handleKeyUp = useCallback(
+    (note) => {
+      engine.render(synth.stopNote(note, adsr));
+    },
+    [adsr]
+  );
 
   useEffect(() => {
     // Handle MIDI events
     // Play note and update indicators
     noteEmitter.on("play", ({ midiNote }) => {
-      handleKeyDown(midiNote, adsr);
+      handleKeyDown(midiNote);
     });
 
     // Stop note
@@ -54,21 +60,17 @@ export default function App() {
     noteEmitter.on("stopAll", () => {
       engine.render(synth.stopAllNotes());
     });
-  }, []);
+  }, [handleKeyDown, handleKeyUp]);
 
-  useEffect(() => {
-    // Handle shortcuts
-    // keyDownShortcuts((note) => handleKeyDown(note, adsr));
-    // keyUpShortcuts((note) => handleKeyUp(note, adsr));
+  // useEffect(() => {
+  //   keyDownShortcuts(handleKeyDown);
+  //   keyUpShortcuts(handleKeyUp);
 
-    keyDownShortcuts(handleKeyDown, adsr);
-    keyUpShortcuts(handleKeyUp, adsr);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keyup", handleKeyUp);
-    };
-  }, []);
+  //   return () => {
+  //     document.removeEventListener("keydown", handleKeyDown);
+  //     document.removeEventListener("keyup", handleKeyUp);
+  //   };
+  // }, []);
 
   function handleControllers(controllers, selectedController) {
     setControllers(controllers);
@@ -110,14 +112,7 @@ export default function App() {
               defaultXd={adsr.decay}
               defaultYs={adsr.sustain}
               defaultXr={adsr.release}
-              // ratio={{
-              //   xa: 0.25,
-              //   xd: 0.25,
-              //   xs: 0.25,
-              //   xr: 0.25,
-              // }}
               onChange={(env) => {
-                console.log(env);
                 setAdsr({
                   attack: env.xa,
                   decay: env.xd,
@@ -209,18 +204,7 @@ export default function App() {
           </div>
           {/* USB MIDI */}
           <div id="controllers">{controllers && renderControllerButtons()}</div>
-          <div id="keyboard" className={styles.keyboard}>
-            {shortcutKeys.map((key, index) => (
-              <Key
-                key={index}
-                midiNote={key.midiNote}
-                shortcutKey={key.key}
-                handleKeyDown={handleKeyDown}
-                handleKeyUp={handleKeyUp}
-                adsr={adsr}
-              />
-            ))}
-          </div>
+          <PianoRoll handleKeyDown={handleKeyDown} handleKeyUp={handleKeyUp} />
         </div>
       )}
     </div>
