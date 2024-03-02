@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./styles/Key.module.scss";
+import styles from "./Key.module.scss";
 
 const sharpNotes = [49, 51, 54, 56, 58, 61, 63, 66, 68, 70];
 

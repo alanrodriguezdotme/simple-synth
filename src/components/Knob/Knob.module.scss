@@ -1,19 +1,45 @@
 .knobContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.knob {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.knob {
-  width: 64px;
-  height: 64px;
+.knobInner {
+  width: 40px;
+  height: 40px;
   background-color: #f0f0f0;
+  border-radius: 50%;
 
   .dot {
-    width: 8px;
-    height: 8px;
+    width: 4px;
+    height: 4px;
     background-color: #000;
     border-radius: 50%;
     position: absolute;
-    top: 10px;
+    top: 4px;
     left: 50%;
     transform: translateX(-50%);
   }
+}
+
+.value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  z-index: 2;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
 }

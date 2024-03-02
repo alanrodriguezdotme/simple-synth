@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
-import Key from "./Key";
-import { shortcutKeys } from "./shortcuts";
-import styles from "./styles/PianoRoll.module.scss";
+import Key from "../Key/Key";
+import { shortcutKeys } from "../../utils/shortcuts";
+import styles from "./PianoRoll.module.scss";
 
 export default function PianoRoll({ handleKeyDown, handleKeyUp }) {
   return (

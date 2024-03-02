@@ -1,10 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export default function useEventListener(
-  eventType,
-  callback,
-  element = window
-) {
+export function useEventListener(eventType, callback, element = window) {
   const callbackRef = useRef(callback);
   useEffect(() => {
     callbackRef.current = callback;
@@ -16,3 +12,7 @@ export default function useEventListener(
     return () => element.removeEventListener(eventType, handler);
   }, [eventType, element]);
 }
+
+export const round = (value) => {
+  return Math.round(value * 100) / 100;
+};

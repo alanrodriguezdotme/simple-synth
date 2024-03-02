@@ -1,0 +1,17 @@
+.adsr {
+  flex: 1;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding: 16px 20px;
+  border: 1px solid #333;
+}
+
+.graph {
+  border: 1px solid #000;
+  width: 300px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

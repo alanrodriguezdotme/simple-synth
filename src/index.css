@@ -1,7 +1,9 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+:root,
+select {
+  font-family: "Sofia Sans Condensed", Inter, system-ui, Avenir, Helvetica,
+    Arial, sans-serif;
   line-height: 1.5;
-  font-weight: 400;
+  font-weight: 700;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -56,6 +58,13 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+select {
+  text-transform: uppercase;
+  font-size: 14px;
+  padding: 2px;
+  margin: 4px;
 }
 
 @media (prefers-color-scheme: light) {
