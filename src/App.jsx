@@ -4,9 +4,9 @@ import { Engine } from "./audio/engine";
 import { Midi } from "./audio/midi";
 import { Synth } from "./audio/synth";
 import { useCallback, useEffect, useState } from "react";
-import { keyDownShortcuts, keyUpShortcuts } from "./shortcuts";
 import EnvelopeGraph from "react-envelope-graph";
 import PianoRoll from "./PianoRoll";
+import Knob from "./components/Knob/Knob";
 
 const noteEmitter = new Emittery();
 const engine = new Engine();
@@ -22,6 +22,7 @@ export default function App() {
     sustain: 0.75,
     release: 0.4,
   });
+  let [waveform, setWaveform] = useState("blepsaw");
 
   async function getStarted(handleControllers) {
     await midi.initialize(handleControllers);
@@ -32,9 +33,9 @@ export default function App() {
 
   const handleKeyDown = useCallback(
     (note) => {
-      engine.render(synth.playNote(note, adsr));
+      engine.render(synth.playNote(note, adsr, waveform));
     },
-    [adsr]
+    [adsr, waveform]
   );
 
   const handleKeyUp = useCallback(
@@ -105,6 +106,19 @@ export default function App() {
         </div>
       ) : (
         <div id="synth" className={styles.synth}>
+          <div id="oscillator" className={styles.oscillator}>
+            <label htmlFor="waveform">Waveform</label>
+            <select
+              id="waveform"
+              onChange={(e) => {
+                setWaveform(e.target.value);
+              }}
+            >
+              <option value="blepsaw">Saw</option>
+              <option value="blepsquare">Square</option>
+              <option value="bleptriangle">Triangle</option>
+            </select>
+          </div>
           <div id="adsr" className={styles.adsr}>
             <EnvelopeGraph
               defaultXa={adsr.attack}
@@ -143,18 +157,12 @@ export default function App() {
             />
             <div>
               <label htmlFor="attack">Attack</label>
-              <input
-                type="range"
-                id="attack"
+              <Knob
                 min={0.01}
-                max={1}
-                step={0.01}
-                defaultValue={adsr.attack}
-                onChange={(e) =>
-                  setAdsr({ ...adsr, attack: Number(e.target.value) })
-                }
+                max={2}
+                value={adsr.attack}
+                onChange={(value) => setAdsr({ ...adsr, attack: value })}
               />
-              <label htmlFor="attack-value">{adsr.attack}</label>
             </div>
             <div>
               <label htmlFor="decay">Decay</label>
@@ -162,7 +170,7 @@ export default function App() {
                 type="range"
                 id="decay"
                 min={0.01}
-                max={1}
+                max={2}
                 step={0.01}
                 defaultValue={adsr.decay}
                 onChange={(e) =>
@@ -192,7 +200,7 @@ export default function App() {
                 type="range"
                 id="release"
                 min={0.01}
-                max={1}
+                max={2}
                 step={0.01}
                 defaultValue={adsr.release}
                 onChange={(e) =>

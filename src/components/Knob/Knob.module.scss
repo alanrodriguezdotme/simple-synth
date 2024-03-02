@@ -1,0 +1,19 @@
+.knobContainer {
+}
+
+.knob {
+  width: 64px;
+  height: 64px;
+  background-color: #f0f0f0;
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    background-color: #000;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
