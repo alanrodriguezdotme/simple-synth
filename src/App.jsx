@@ -127,7 +127,7 @@ export default function App() {
                     {controllers.length > 0 ? (
                       renderControllerButtons()
                     ) : (
-                      <option value="">No MIDI foundfffff</option>
+                      <option value="">No MIDI found</option>
                     )}
                   </select>
                 </div>
