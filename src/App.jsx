@@ -6,7 +6,7 @@ import { Midi } from "./audio/midi";
 import { Synth } from "./audio/synth";
 import { useCallback, useEffect, useState } from "react";
 import PianoRoll from "./components/PianoRoll/PianoRoll";
-import ADSR from "./components/Adsr/Adsr";
+import ADSR from "./components/ADSR/ADSR";
 
 const noteEmitter = new Emittery();
 const engine = new Engine();
